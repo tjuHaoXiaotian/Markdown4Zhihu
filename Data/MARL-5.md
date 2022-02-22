@@ -8,9 +8,9 @@
 
 ## 1. 一张大图
 
-![一张大图](./banner.png)
+![一张大图](./MARL-5/banner.png)
 
-此图按时间线涵盖了主要的基于值分解的多智体强化学习算法（multi-agent value function factorization methods），在本文中，首先回顾在CTDE（Centralized Training with Decentralized Execution ）范式下，满足IGM（Individual-Global-Max）条件的4个代表算法：VDN [1], QMIX [2], QTRAN [3] 和 QPLEX [7]，其他文章后续再做介绍。
+此图按时间线涵盖了主要的基于值分解的多智体强化学习算法（multi-agent value function factorization methods），在本文中，首先回顾在CTDE（Centralized Training with Decentralized Execution ）范式下，满足IGM（Individual-Global-Max）条件的4个代表算法：VDN [1], QMIX [2], QTRAN [3] 和 QPLEX [7]，其他文章（例如Weighted QMIX[5],）后续再做介绍。本文用到的demo代码，后续会在GitHub更新。欢迎大家关注。
 
 
 
@@ -20,7 +20,7 @@
 
 本篇主要涉及的5个算法属于Q-learning based算法，本质在于利用动态规划求解“最优贝尔曼方程”（optimal bellman equation），集中式（Centralized Q-learning）视角下，最优贝尔曼方程形式如下图所示（Double DQN的形式）：
 
-![optimal bellman-equation](./2-1.png)
+![optimal bellman-equation](./MARL-5/2-1.png)
 
 在基于深度学习的强化学习中，我们一般将等式右端项称为 ”target label“，而等式左侧为 “基于神经网络的Q-value function”，贝尔曼方程的迭代求解过程即为不断用左侧的 ”神经网络“去逼近右侧新产生的 ”target label“的过程。
 
@@ -46,13 +46,13 @@ $$
 
 为了方便的满足IGM condition，以VDN [1] 和 QMIX [2] 为例，采用了如下图所示的monotonic mixing网络的设计，即$\forall \mathrm{i}, \frac{\partial \mathbf{Q}_{\text{joint}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})}{\partial \mathrm{Q}_{\mathrm{i}}\left(\mathrm{s}_{\mathrm{i}}, \mathrm{a}_{\mathrm{i}}\right)} \geq 0$。于此同时，monotonic的网络结构也限制了$Q_\text{joint}$值函数的拟合能力，详细内容在下一节展开。
 
-![monotonic_nn](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\monotonic_nn.png)
+![monotonic_nn](./MARL-5/monotonic_nn.png)
 
 ## 3. 算法回顾
 
 ### 3.1 符号说明
 
-![notation](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\notation.png)
+![notation](./MARL-5/notation.png)
 
 在后文中，我们统一用$\mathbf{Q}_{\text{joint}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$ 来表示ground truth value（真值），$\mathbf{Q}_{\text{tot}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$来表示拟合值（预估值）。
 
@@ -64,9 +64,9 @@ $$
 
 VDN [1] 和 QMIX [2] 的预估值 $\mathbf{Q}_{\text{tot}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$ 采用了如下图所示的monotonic mixing网络的设计：
 
-![monotonic_Q_tot](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\monotonic_Q_tot.png)
+![monotonic_Q_tot](./MARL-5/monotonic_Q_tot.png)
 
-![vdn_qmix](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\vdn_qmix.png)
+![vdn_qmix](./MARL-5/vdn_qmix.png)
 
 #### 拟合能力受限导致“evaluation”不准确，进一步导致“improvement”陷入次优
 
@@ -76,7 +76,7 @@ VDN [1] 和 QMIX [2] 的预估值 $\mathbf{Q}_{\text{tot}}(\overrightarrow{\math
 
 我们以2个agents的single state matrix game为例（payoff 矩阵如下图），分析monotonic 约束导致的$Q_i$在拟合过程中存在的矛盾性。
 
-![matrix_game](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\matrix_game.png)
+![matrix_game](./MARL-5/matrix_game.png)
 
 记横向、列向 agents 分别为agent-1和agent-2，2个agents均从random policy开始学习。由payoff矩阵可知，情况1：当agent-1选择action $a_1$，agent-2分别选择$b_1$和$b_2$时，有$Q_{\text {tot}}\left(a_{1}, b_{1}\right)>Q_\text{tot}\left(a_{1}, b_{2}\right)$ ($8>-12$）。由于agent-1输入$\mathbf{Q}_{\text{tot}}$网络部分为$Q_{1}\left(a_{1}\right)$ 不变，根据$\mathbf{Q}_{\text{tot}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$网络的单调性 $\Rightarrow$ 对agent-2有 $ Q_{2}\left(b_{1}\right)>Q_{2}\left(b_{2}\right)$。
 
@@ -86,7 +86,7 @@ VDN [1] 和 QMIX [2] 的预估值 $\mathbf{Q}_{\text{tot}}(\overrightarrow{\math
 
 以VDN为例，上述拟合问题本质是线性方程组的求解，由于2个agents均采取random policies，9条样本出现频率相同，对应的线性方程组如下图所示：
 
-![linear_equation](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\linear_equation.png)
+![linear_equation](./MARL-5/linear_equation.png)
 
 很容易知道此方程组无解。根据最小二乘法，有，$Q_i=(A^\mathsf{T}A)^{-1}A^\mathsf{T}y$，这里$A$为系数矩阵，$y$为label (payoff)，在这个例子里$A^\mathsf{T}A$恰好为singular matrix，不可逆，加入L2正则项，解析解变为$Q_i=(A^\mathsf{T}A+\lambda E)^{-1}A^\mathsf{T}y$
 
@@ -130,7 +130,7 @@ print(q_i)
 
 仍2个agents的single state matrix game为例，payoff 矩阵如下图：
 
-![matrix_game2](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\matrix_game2.png)
+![matrix_game2](./MARL-5/matrix_game2.png)
 
  可知，不管横向agent-1，选择action $a_1, a_2$还是$a_3$，对于列向agent-2而言，始终有$Q_{2}\left(b_{1}\right)>Q_{2}\left(b_{2}\right)>Q_{2}\left(b_{3}\right)$。同理，对列向agent-2也一样，不管其选择action $b_1, b_2$还是$b_3$，都不会影响agent-1 各个action individual Q值的相对大小，即$Q_{1}\left(a_{1}\right)>Q_{1}\left(a_{2}\right)==Q_{1}\left(a_{3}\right)$。因此，各自的最优action始终为$a_1$和$b_1$，与全局最优保持一致。
 
@@ -238,7 +238,7 @@ Iter=1900: MSE loss=0.13802725076675415
 
 回顾VDN/QMIX，为了保证在任意状态下，根据预估值$\mathbf{Q}_{\text{tot}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$选择的最优joint action与根据ground truth $\mathbf{Q}_{\text{joint}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$ 选择出的最优joint action一致，VDN/QMIX 在evaluation时，要求$\forall \overrightarrow{\mathbf{s}},\ \overrightarrow{\mathbf{a}}, \  \mathbf{Q}_{\text{tot}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})==\mathbf{Q}_{\text{joint}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$。与之相比，QTRAN放宽了限制，可以看做是一种“把好钢用在刀刃上”的做法。
 
-![vdn_style_qtran](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\vdn_style_qtran.png)
+![vdn_style_qtran](./MARL-5/vdn_style_qtran.png)
 
 具体，我们这里对比 VDN 与 VDN style QTRAN （VDN style是指$\mathbf{Q}_{\text{tot}}$采用对individual $Q_i$线性加和的形式）的区别。如上图所示，VDN要求$\forall \overrightarrow{\mathbf{s}},\ \overrightarrow{\mathbf{a}}, \  \mathbf{Q}_{\text{tot}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})==\mathbf{Q}_{\text{joint}}(\overrightarrow{\mathbf{s}}, \overrightarrow{\mathbf{a}})$，而QTRAN做了分情况讨论：（1）当所有agents都采取individual greedy action时，要保证 $\mathbf{Q}_{\text{tot}}==\mathbf{Q}_{\text{joint}}$；（2）对其他所有情况（即任意agent没有采取individual greedy action时），只需要 $\mathbf{Q}_{\text{tot}}\ge\mathbf{Q}_{\text{joint}}$，也就是$\mathbf{Q}_{\text{tot}}$的拟合能力虽然受限，但放宽了约束条件，不要求“严格取等”，只需要“大于等于”。
 
@@ -246,13 +246,13 @@ Iter=1900: MSE loss=0.13802725076675415
 
 由于$\mathbf{Q}_{\text{tot}}$的monotonicity，各个agents根据individual $Q_i$ 选择的local greedy action即为$\mathbf{Q}_{\text{tot}}$的最大值点，同时由于2条曲线只在最大值点重合，$\mathbf{Q}_{\text{tot}}$的最大值点同时也是$Q_\text{joint}$的最大值点，因此满足了IGM condition（各个agents根据individual $Q_i$ 选择的local greedy action构成的joint action 等价于 根据$Q_\text{joint}$ 选择出的 joint greedy action）。
 
-![vdn_vs_qtran](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\vdn_vs_qtran.png)
+![vdn_vs_qtran](./MARL-5/vdn_vs_qtran.png)
 
 于此同时，QTRAN中的$\mathbf{Q}_{\text{tot}}$不再要求要在所有joint actions处与$\mathbf{Q}_{\text{joint}}$“严丝合缝的贴合”，因此尽管$\mathbf{Q}_{\text{tot}}$拟合能力受限，QTRAN仍能收敛至最优解。
 
 #### 对于VDN/QMIX 出问题的例子
 
-![matrix_game](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\matrix_game.png)
+![matrix_game](./MARL-5/matrix_game.png)
 
 ```
 Iter=1400: QTRAN loss=0.0
@@ -291,7 +291,7 @@ QTRAN要求（1）当所有agents都采取individual greedy action时，要保�
 
 我们举个因”负样本不足“而导致的陷入次优的情况：
 
-![qtran_insufficient_sample](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\qtran_insufficient_sample.png)
+![qtran_insufficient_sample](./MARL-5/qtran_insufficient_sample.png)
 
 两条绿色“竖线”中间部分对应的joint action点，因训练过程中负样本点采样不足而被“忽略”，导致预估网络$\mathbf{Q}_{\text{tot}}$在“见到”过的样本中的最优非“全局最优”。
 
@@ -301,7 +301,7 @@ QTRAN要求（1）当所有agents都采取individual greedy action时，要保�
 
 #### QPLEX是借鉴了QTRAN思想的另一种“实现”
 
-![qplex](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\qplex.png)
+![qplex](./MARL-5/qplex.png)
 
 QPLEX预估网络$\mathbf{Q}_{\text{tot}}$设计的核心依然围绕“在方便求解最大值”的同时“增强网络的表征能力”展开，核心为 ${\color{red}Q_\text{tot}^\text{max}-\text{difference}}$的设计，构造的等式如上图所示。与QTRAN的2个条件非常相似：
 
@@ -315,7 +315,7 @@ $\text{Difference}(\vec s,\left<a_1, a_2\right>)$函数具体定义为：$\lambd
 
 #### 对于VDN/QMIX 出问题的例子
 
-![matrix_game](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\matrix_game.png)
+![matrix_game](./MARL-5/matrix_game.png)
 
 ```
 Iter=1500: MSE loss=0.1864847093820572
@@ -349,7 +349,7 @@ Iter=1900: MSE loss=0.1674421727657318
 
 #### QPLEX的缺点：容易陷入“局部最优”
 
-![qplex_sub_optimal](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\qplex_sub_optimal.png)
+![qplex_sub_optimal](./MARL-5/qplex_sub_optimal.png)
 
 QPLEX缺陷来自于其核心${\color{red}Q_\text{tot}^\text{max}-\text{difference}}$的设计，即（1）首先把当前$Q_\text{tot}$预估的最大值锚定为整个函数空间的上界；（2）其他任意值表示为此锚定值减去一个大于0的差值。
 
@@ -361,7 +361,7 @@ QPLEX缺陷来自于其核心${\color{red}Q_\text{tot}^\text{max}-\text{differen
 
 #### 还是这个例子
 
-![matrix_game](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\matrix_game.png)
+![matrix_game](./MARL-5/matrix_game.png)
 
 ```
 Iter=1500: MSE loss=3.6293046474456787
@@ -393,7 +393,7 @@ Iter=1900: MSE loss=3.628178119659424
 
 ### 3.5 其他相关算法
 
-本文未介绍的Weighted QMIX[5], QTRAN++ [6]等算法，核心思想与QTRAN、QPLEX十分相似，本次暂不做更详细介绍。
+本文未介绍的Weighted QMIX[5], QTRAN++ [6]等算法，核心思想与QTRAN、QPLEX十分相似，本次暂不做更详细介绍，包括最新的一些算法后续有时间也会继续更新，欢迎大家关注专栏。
 
 
 
@@ -401,11 +401,11 @@ Iter=1900: MSE loss=3.628178119659424
 
 上述几个工作都是基于multiagent centralized Q-learning，围绕“在方便求解最大值”的同时“增强网络的表征能力”展开，在方法设计上有一定的创新性。总的来说，网络结构设计越复杂，其表征能力会越强，但与此同时，训练所需要的样本数量也随之增加，收敛变得更慢也更困难。
 
-最后谈一点个人感受：目前multiagent这一块可以说是“百花齐放（乱七八糟）“，A说A是SOTA，B说B是SOTA，反正大家就都是SOTA，其乐融融，好不热闹。没有合理的对比实验，只是为了“绩效”而不负责任地刷文章的话，就成了“故事会”。对于MA实验效果的置信度问题（尤其是在SMAC [7]上的工作），可以参考另一篇优秀的博文：[《多智能体强化学习实验打脸集合》](https://zhuanlan.zhihu.com/p/408515796)。
+最后谈一点个人感受：目前multiagent这一块可以说是“百花齐放（乱七八糟）“，A说A是SOTA，B说B是SOTA，反正大家就都是SOTA，其乐融融，好不热闹。没有合理的对比实验，只是为了“绩效”而不负责任地刷文章的话，就成了“故事会”。对于MA实验效果的置信度问题（尤其是在SMAC [7]上的工作），可以参考另一篇博文：[《多智能体强化学习实验打脸集合》](https://zhuanlan.zhihu.com/p/408515796)。
 
 目前，前路仍然是黑夜，看不清MA何去何从。不过，努力让自己的工作越来越solid吧，期待拨云见日的一天。
 
-![taiji-02](C:\Users\15122\OneDrive\论文\【0】article of me\知乎\MARL-7\太极张三丰\taiji-02.jpg)
+![taiji-02](MARL-5/taiji-05.jpg)
 
 
 
