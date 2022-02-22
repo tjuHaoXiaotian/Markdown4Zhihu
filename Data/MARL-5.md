@@ -26,9 +26,9 @@
 
 在一次最优贝尔曼迭代中，同时涉及到了**evaluation** 和 **improvement** 2个过程：
 
-  （1）**improvement** ，即等式右侧 “新的target label”的计算，主要涉及到对 $\text{argmax}_\vec{a'}Q_\text{joint}(\vec{s'},\vec{a'})$的求解，与单智能体相比，这里最大的挑战在于多智能体的联合动作空间随着智能体的数量呈指数增长，暴力枚举不切实际。针对这一点，设计算法时要考虑 ”${\color{red}\text{Q值函数是否容易求解最大值？}}$“
+  （1）**improvement** ，即等式右侧 “新的target label”的计算，主要涉及到对 $\text{argmax}_\vec{a'}Q_\text{joint}(\vec{s'},\vec{a'})$的求解，与单智能体相比，这里最大的挑战在于多智能体的联合动作空间随着智能体的数量呈指数增长，暴力枚举不切实际。针对这一点，设计算法时要考虑 ”$\color{red}{\text{Q值函数是否容易求解最大值？}}$“
 
-  （2）**evaluation**，即等式左侧 ”神经网络“对右侧 ”新的target label“进行拟合，设计算法时要考虑 ”${\color{red}\text{基于神经网络的Q值函数是否有足够的拟合能力？}}$“
+  （2）**evaluation**，即等式左侧 ”神经网络“对右侧 ”新的target label“进行拟合，设计算法时要考虑 ”$\color{red}{\text{基于神经网络的Q值函数是否有足够的拟合能力？}}$“
 
 
 
@@ -351,7 +351,7 @@ Iter=1900: MSE loss=0.1674421727657318
 
 ![qplex_sub_optimal](./MARL-5/qplex_sub_optimal.png)
 
-QPLEX缺陷来自于其核心${\color{red}Q_\text{tot}^\text{max}-\text{difference}}$的设计，即（1）首先把当前$Q_\text{tot}$预估的最大值锚定为整个函数空间的上界；（2）其他任意值表示为此锚定值减去一个大于0的差值。
+QPLEX缺陷来自于其核心$\color{red}{Q_\text{tot}^\text{max}-\text{difference}}$的设计，即（1）首先把当前$Q_\text{tot}$预估的最大值锚定为整个函数空间的上界；（2）其他任意值表示为此锚定值减去一个大于0的差值。
 
 以上图图（a）为例，在优化初始阶段，锚定值“不正确”（也就是$Q_\text{tot}$的最大值$\neq$$Q_\text{joint}$的最大值）， $Q_\text{tot}$在此锚定的上界约束下，其他位置Q值均小于该锚定值。此时，$Q_\text{tot}$的拟合Error很大，要想缩小拟合Error，锚定点右侧的红色虚线要对应的拉高（如红色箭头所示），以此来贴合蓝色的真值曲线。
 
