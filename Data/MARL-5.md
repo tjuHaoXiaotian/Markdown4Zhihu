@@ -10,13 +10,13 @@
 
 ![一张大图](./MARL-5/banner.png)
 
-此图按时间线涵盖了主要的基于值分解的多智体强化学习算法（multi-agent value function factorization methods），在本文中，首先回顾在CTDE（Centralized Training with Decentralized Execution ）范式下，满足IGM（Individual-Global-Max）条件的4个代表算法：VDN [1], QMIX [2], QTRAN [3] 和 QPLEX [7]，其他文章（例如Weighted QMIX[5],）后续再做介绍。本文用到的demo代码，后续会在GitHub更新。欢迎大家关注。
+这是21年5月份写的一个总结，一直未有时间更新，今天补上了。此图按时间线涵盖了主要的基于值分解的多智体强化学习算法（multi-agent value function factorization methods），在本文中，首先回顾在CTDE（Centralized Training with Decentralized Execution ）范式下，满足IGM（Individual-Global-Max）条件的4个代表算法：VDN [1], QMIX [2], QTRAN [3] 和 QPLEX [7]，其他文章（例如Weighted QMIX[5],）后续再做介绍。本文用到的demo代码，后续也会在GitHub更新，欢迎大家关注。
 
 
 
 ## 2. 核心矛盾：Q函数 “拟合能力强弱” 与 “最值求解难易程度”
 
-### Optimal Bellman Equation
+### 2.1 Optimal Bellman Equation
 
 本篇主要涉及的5个算法属于Q-learning based算法，本质在于利用动态规划求解“最优贝尔曼方程”（optimal bellman equation），集中式（Centralized Q-learning）视角下，最优贝尔曼方程形式如下图所示（Double DQN的形式）：
 
@@ -32,7 +32,7 @@
 
 
 
-### Q值函数 “拟合能力” 与 “是否容易求解最大值” 之间的矛盾
+### 2.2 Q值函数 “拟合能力” 与 “是否容易求解最大值” 之间的矛盾
 
 函数结构越复杂，其拟合能力会越强，同时导致该函数 “最大值“ 点的求解越困难。
 
@@ -303,7 +303,7 @@ QTRAN要求（1）当所有agents都采取individual greedy action时，要保�
 
 ![qplex](./MARL-5/qplex.png)
 
-QPLEX预估网络$\mathbf{Q}_{\text{tot}}$设计的核心依然围绕“在方便求解最大值”的同时“增强网络的表征能力”展开，核心为 ${\color{red}Q_\text{tot}^\text{max}-\text{difference}}$的设计，构造的等式如上图所示。与QTRAN的2个条件非常相似：
+QPLEX预估网络$\mathbf{Q}_{\text{tot}}$设计的核心依然围绕“在方便求解最大值”的同时“增强网络的表征能力”展开，核心为 $\color{red}{Q_\text{tot}^\text{max}-\text{difference}}$的设计，构造的等式如上图所示。与QTRAN的2个条件非常相似：
 
 （1）当所有agents都采取individual greedy action时， $\mathbf{Q}_{\text{tot}}=Q_1(\bar a_1)+Q_2(\bar a_2)$，要求其$==\mathbf{Q}_{\text{joint}}$；
 
