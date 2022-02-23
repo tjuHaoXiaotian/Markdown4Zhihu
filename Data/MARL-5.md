@@ -10,7 +10,11 @@
 
 ![一张大图](./MARL-5/banner.png)
 
-这是21年5月份写的一个总结，一直未有时间更新，今天补上了。此图按时间线涵盖了主要的基于值分解的多智体强化学习算法（multi-agent value function factorization methods），在本文中，首先回顾在CTDE（Centralized Training with Decentralized Execution ）范式下，满足IGM（Individual-Global-Max）条件的4个代表算法：VDN [1], QMIX [2], QTRAN [3] 和 QPLEX [7]，其他文章（例如Weighted QMIX[5],）后续再做介绍。本文用到的demo代码，后续也会在GitHub更新，欢迎大家关注。
+```text
+这是2021年8月份动手写的一个总结，拖了许久一直未更新到知乎，今天补上了。
+```
+
+此图按时间线涵盖了主要的基于值分解的多智体强化学习算法（multi-agent value function factorization methods），在本文中，首先回顾在CTDE（Centralized  Training with Decentralized Execution  ）范式下，满足IGM（Individual-Global-Max）条件的4个代表算法：VDN [1], QMIX [2], QTRAN [3] 和 QPLEX [7]，其他相关文章（包括最新的一些研究）后续再做介绍。本文用到的demo代码，后续也会在GitHub更新，欢迎大家关注。
 
 
 
@@ -393,17 +397,19 @@ Iter=1900: MSE loss=3.628178119659424
 
 ### 3.5 其他相关算法
 
-本文未介绍的Weighted QMIX[5], QTRAN++ [6]等算法，核心思想与QTRAN、QPLEX十分相似，本次暂不做更详细介绍，包括最新的一些算法后续有时间也会继续更新，欢迎大家关注专栏。
+本文未介绍的Weighted QMIX[5], QTRAN++ [6]等算法，核心思想与QTRAN、QPLEX十分相似，另外DCG[9] 等基于更高阶的函数分解来拟合$Q_\text{joint}$，思想类似，更高阶的分解带来拟合精度提升的同时也带来优化上（即取max)的复杂度增加，本次暂不做更详细介绍，一些最新的算法后续有时间也会继续更新，欢迎大家关注专栏。
 
 
 
 ## 4. 小结
 
-上述几个工作都是基于multiagent centralized Q-learning，围绕“在方便求解最大值”的同时“增强网络的表征能力”展开，在方法设计上有一定的创新性。总的来说，网络结构设计越复杂，其表征能力会越强，但与此同时，训练所需要的样本数量也随之增加，收敛变得更慢也更困难。
+上述几个工作都是基于multiagent centralized  Q-learning，围绕“在方便求解最大值”的同时“增强网络的表征能力”展开，在方法设计上有一定的创新性。总的来说，网络结构设计越复杂，其表征能力会越强，但与此同时，训练所需要的样本数量也随之增加，收敛变得更慢也更困难。
 
-最后谈一点个人感受：目前multiagent这一块可以说是“百花齐放（乱七八糟）“，A说A是SOTA，B说B是SOTA，反正大家就都是SOTA，其乐融融，好不热闹。没有合理的对比实验，只是为了“绩效”而不负责任地刷文章的话，就成了“故事会”。对于MA实验效果的置信度问题（尤其是在SMAC [7]上的工作），可以参考另一篇博文：[《多智能体强化学习实验打脸集合》](https://zhuanlan.zhihu.com/p/408515796)。
+最后谈一点个人感受：目前multiagent这一块可以说是“百花齐放（乱七八糟）”，A说A是SOTA，B说B是SOTA，反正大家就都是SOTA，其乐融融，好不热闹。没有合理的对比实验，只是为了“绩效”而不负责任地刷文章的话，就成了“故事会”。对于MA实验效果的置信度问题（尤其是在SMAC [7]上的工作），可以参考前一段时间知乎上的一篇博文：[《多智能体强化学习实验打脸集合》](https://zhuanlan.zhihu.com/p/408515796)。
 
 目前，前路仍然是黑夜，看不清MA何去何从。不过，努力让自己的工作越来越solid吧，期待拨云见日的一天。
+
+[最后编辑于2021年10月]
 
 ![taiji-02](MARL-5/taiji-05.jpg)
 
@@ -426,3 +432,5 @@ Iter=1900: MSE loss=3.628178119659424
 [7] [QPLEX] Wang J, Ren Z, Liu T, et al. Qplex: Duplex dueling multi-agent q-learning[J]. arXiv preprint arXiv:2008.01062, 2020.
 
 [8] [SMAC] Samvelyan M, Rashid T, De Witt C S, et al. The starcraft multi-agent challenge[J]. arXiv preprint arXiv:1902.04043, 2019.
+
+[9] Böhmer W, Kurin V, Whiteson S. Deep coordination  graphs[C]//International Conference on Machine Learning. PMLR, 2020:  980-991.
