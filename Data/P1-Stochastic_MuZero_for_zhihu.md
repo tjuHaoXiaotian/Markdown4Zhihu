@@ -36,7 +36,11 @@ MuZero在多个领域的控制任务上取得了SOTA的表现，然而
 
 ## 4. 实验
 
+实验分3部分，（1）首先在single agent带有随机性的环境中，验证了*Stochastic* *MuZero*性能远超过使用deterministic model建模的MuZero，并且能够逼近使用perfect simulator的AlphaZero；（2）其次在2-player的西洋双陆棋（随机性：通过掷色子决定下一步能走的步数）也验证了与（1）相同的结论；（3）最后在deterministic的围棋环境中验证了：针对deterministic的环境，*Stochastic* *MuZero*虽然采用stochastic dynamic model建模，但其性能不亚于采用deterministic model建模的Muzero，即stochastic dynamic model的引入没有造成额外的performance drop。
+
 ![image-20220309102640682](https://raw.githubusercontent.com/tjuHaoXiaotian/Markdown4Zhihu/master/Data/P1-Stochastic_MuZero/image-20220309102640682.png)
+
+
 
 ![image-20220309102713354](https://raw.githubusercontent.com/tjuHaoXiaotian/Markdown4Zhihu/master/Data/P1-Stochastic_MuZero/image-20220309102713354.png)
 
